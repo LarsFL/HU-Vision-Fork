@@ -44,6 +44,7 @@ IntensityImage * DefaultPreProcessing::stepEdgeDetection(const IntensityImage &s
 	return ThoroughFloodThoroughFire;
 }
 
+
 IntensityImage * DefaultPreProcessing::stepThresholding(const IntensityImage &src) const {
 	cv::Mat OverHillOverDale;
 	HereBeDragons::HerLoveForWhoseDearLoveIRiseAndFall(src, OverHillOverDale);

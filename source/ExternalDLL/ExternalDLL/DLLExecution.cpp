@@ -395,7 +395,8 @@ bool DLLExecution::executePreProcessingStep3(bool student) {
 	if (!resultPreProcessingStep2) {
 		return false;
 	}
-	if (student) {
+	if (true) {
+		std::cout << "Doing student stuff" << std::endl;
 		resultPreProcessingStep3 = studentPreProcessing.stepEdgeDetection(*resultPreProcessingStep2);
 	} else {
 		resultPreProcessingStep3 = defaultPreProcessing.stepEdgeDetection(*resultPreProcessingStep2);
@@ -407,7 +408,7 @@ bool DLLExecution::executePreProcessingStep4(bool student) {
 	if (!resultPreProcessingStep3) {
 		return false;
 	}
-	if (student) {
+	if (true) {
 		resultPreProcessingStep4 = studentPreProcessing.stepThresholding(*resultPreProcessingStep3);
 	} else {
 		resultPreProcessingStep4 = defaultPreProcessing.stepThresholding(*resultPreProcessingStep3);
