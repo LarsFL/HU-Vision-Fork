@@ -19,14 +19,14 @@ int main(int argc, char * argv[]) {
 	//ImageFactory::setImplementation(ImageFactory::STUDENT);
 
 
-	ImageIO::debugFolder = "C:\\Users\\larsl\\Downloads\\FaceMinMin";
+	ImageIO::debugFolder = "C:/Users/Daan/HU/Vision/HU-Vision-Fork/debugFolder";
 	ImageIO::isInDebugMode = true; //If set to false the ImageIO class will skip any image save function calls
 
 
 
 	// C:/Users/larsl/Documents/GitHub/HU-Vision-Fork/testsets/Set A/TestSet Images/female-3.png
 	RGBImage * input = ImageFactory::newRGBImage();
-	if (!ImageIO::loadImage("C:/Users/larsl/Documents/GitHub/HU-Vision-Fork/testsets/Set A/TestSet Images/child-1.png", *input)) {
+	if (!ImageIO::loadImage("C:/Users/Daan/HU/Vision/HU-Vision-Fork/testsets/Set A/TestSet Images/child-1.png", *input)) {
 		std::cout << "Image could not be loaded!" << std::endl;
 		system("pause");
 		return 0;
@@ -50,14 +50,6 @@ int main(int argc, char * argv[]) {
 	system("pause");
 	return 1;
 }
-
-
-
-
-
-
-
-
 
 
 bool executeSteps(DLLExecution * executor) {
