@@ -48,6 +48,7 @@ public:
 	IntensityImage * resultPreProcessingStep2;
 	IntensityImage * resultPreProcessingStep3;
 	IntensityImage * resultPreProcessingStep4;
+	IntensityImage * resultPreProcessingStep5;
 
 
 	//Debug images
@@ -72,6 +73,7 @@ public:
 	bool executePreProcessingStep2(bool student);
 	bool executePreProcessingStep3(bool student);
 	bool executePreProcessingStep4(bool student);
+	bool executePreProcessingStep5(bool student, std::string debugFolder, std::string folder, std::string fileName);
 
 
 	bool prepareLocalization();

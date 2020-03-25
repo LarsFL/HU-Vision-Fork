@@ -16,7 +16,7 @@
 #include <opencv2/core/core.hpp>
 
 void drawFeatureDebugImage(IntensityImage &image, FeatureMap &features);
-bool executeSteps(DLLExecution * executor, std::string fileName);
+bool executeSteps(DLLExecution * executor, std::string folder, std::string fileName);
 
 int main(int argc, char * argv[]) {
 
@@ -25,6 +25,7 @@ int main(int argc, char * argv[]) {
 
 
 	ImageIO::debugFolder = "C:\\Users\\larsl\\Downloads\\FaceMinMin\\Pasadena-Houses-Debug";
+	std::string finalFolder = "C:\\Users\\larsl\\Downloads\\FaceMinMin\\Pasadena-Houses-Hough\\";
 	std::string imageFolder = "C:\\Users\\larsl\\Documents\\Pasadena-Houses-2000\\Pasadena-Houses\\*.jpg";
 	ImageIO::isInDebugMode = true; //If set to false the ImageIO class will skip any image save function calls
 
@@ -34,7 +35,7 @@ int main(int argc, char * argv[]) {
 
 	for (auto& imageLocation : fn) {
 		std::cout << imageLocation << std::endl;
-		RGBImage* input = ImageFactory::newRGBImage(880, 584);
+		RGBImage* input = ImageFactory::newRGBImage(1760, 1168);
 		if (!ImageIO::loadImage(imageLocation, *input)) {
 			std::cout << "Image could not be loaded!" << std::endl;
 			system("pause");
@@ -45,7 +46,7 @@ int main(int argc, char * argv[]) {
 
 		std::size_t found = imageLocation.find_last_of("/\\");
 
-		if (executeSteps(executor, imageLocation.substr(found+1))) {
+		if (executeSteps(executor, finalFolder, imageLocation.substr(found+1))) {
 		}
 
 		delete executor;
@@ -87,7 +88,7 @@ int main(int argc, char * argv[]) {
 
 
 
-bool executeSteps(DLLExecution * executor, std::string fileName) {
+bool executeSteps(DLLExecution * executor, std::string folder, std::string fileName) {
 
 	//Execute the four Pre-processing steps
 	if (!executor->executePreProcessingStep1(false)) {
@@ -95,10 +96,12 @@ bool executeSteps(DLLExecution * executor, std::string fileName) {
 		return false;
 	}
 
-	if (!executor->executePreProcessingStep2(false)) {
-		std::cout << "Pre-processing step 2 failed!" << std::endl;
+	executor->resultPreProcessingStep2 = executor->resultPreProcessingStep1;
+
+	/*if (!executor->executePreProcessingStep2(false)) {
+		std::cout << "pre-processing step 2 failed!" << std::endl;
 		return false;
-	}
+	}*/
 	//ImageIO::saveIntensityImage(*executor->resultPreProcessingStep2, ImageIO::getDebugFileName("Pre-processing-2.png"));
 
 	if (!executor->executePreProcessingStep3(false)) {
@@ -112,6 +115,11 @@ bool executeSteps(DLLExecution * executor, std::string fileName) {
 		return false;
 	}
 	ImageIO::saveIntensityImage(*executor->resultPreProcessingStep4, ImageIO::getDebugFileName(fileName));
+
+	if (!executor->executePreProcessingStep5(false, "C:\\Users\\larsl\\Downloads\\FaceMinMin\\Pasadena-Houses-Debug", folder, fileName)) {
+		std::cout << "Pre-processing step 4 failed!" << std::endl;
+		return false;
+	}
 
 
 
@@ -171,10 +179,10 @@ bool executeSteps(DLLExecution * executor, std::string fileName) {
 
 
 	//Post processing and representation
-	if (!executor->executePostProcessing()) {
-		std::cout << "Post-processing failed!" << std::endl;
-		return false;
-	}
+	//if (!executor->executePostProcessing()) {
+	//	std::cout << "Post-processing failed!" << std::endl;
+	//	return false;
+	//}
 
 	//drawFeatureDebugImage(*executor->resultPreProcessingStep1, executor->featuresScaled);
 

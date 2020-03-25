@@ -13,6 +13,7 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
+
 DLLExecution::DLLExecution(RGBImage * inputImage):
 	inputImage(inputImage),
 	resultPreProcessingStep1(0),
@@ -21,7 +22,7 @@ DLLExecution::DLLExecution(RGBImage * inputImage):
 	resultPreProcessingStep4(0),
 	hasPreparedExtraction(false),
 	hasPreparedLocalization(false),
-	downScaleFactor(-1){
+	downScaleFactor(0.2f){
 
 	//Comment in to enable debug while executing from the GUI
 	//ImageIO::debugFolder = "D:\\Users\\<Name>\\FaceMinMin";
@@ -34,9 +35,10 @@ DLLExecution::~DLLExecution() {
 	//InputImage is not delete here because it should be deleted by the creator of the image
 
 	delete resultPreProcessingStep1;
-	delete resultPreProcessingStep2;
+	//delete resultPreProcessingStep2;
 	delete resultPreProcessingStep3;
 	delete resultPreProcessingStep4;
+	delete resultPreProcessingStep5;
 	delete localizationDebug;
 	delete extractionDebug;
 }
@@ -47,31 +49,22 @@ DLLExecution::~DLLExecution() {
 
 
 bool DLLExecution::executePostProcessing() {
+	if (!hasPreparedExtraction || !resultPreProcessingStep4) {
+		return false;
+	}
 
-	cv::Mat dst;
-	ImageIO::intensityToRGB(*this->resultPreProcessingStep4, dst);
-	cv::Mat test(this->resultPreProcessingStep4);
-	cv::cvtColor(this->resultPreProcessingStep4, );
+	double scaleFactorReverse = (1.0 / downScaleFactor);
 
-	cv::HoughLines()
-
-
-	//if (!hasPreparedExtraction || !resultPreProcessingStep4) {
-	//	return false;
-	//}
-
-	//double scaleFactorReverse = (1.0 / downScaleFactor);
-
-	//featuresScaled = features;
-	//featuresScaled.applyScale(scaleFactorReverse);
+	featuresScaled = features;
+	featuresScaled.applyScale(scaleFactorReverse);
 
 
-	//if (!postProcessing.stepLocalizeAdditionalFeatures(*resultPreProcessingStep4, featuresScaled)) {
-	//	return false;
-	//}
-	//if (!postProcessing.stepPostProcessAdjustFeatures(featuresScaled)) {
-	//	return false;
-	//}
+	if (!postProcessing.stepLocalizeAdditionalFeatures(*resultPreProcessingStep4, featuresScaled)) {
+		return false;
+	}
+	if (!postProcessing.stepPostProcessAdjustFeatures(featuresScaled)) {
+		return false;
+	}
 
 	return true;
 }
@@ -426,4 +419,30 @@ bool DLLExecution::executePreProcessingStep4(bool student) {
 		resultPreProcessingStep4 = defaultPreProcessing.stepThresholding(*resultPreProcessingStep3);
 	}
 	return resultPreProcessingStep4 != NULL;
+}
+
+bool DLLExecution::executePreProcessingStep5(bool student, std::string debugFolder, std::string folder, std::string fileName) {
+	std::cout << "Getting image from: " << (debugFolder + "\\" + fileName) << std::endl;
+	cv::Mat image = cv::imread((debugFolder+"\\"+fileName), CV_LOAD_IMAGE_UNCHANGED);
+	cv::Mat out;
+	cv::cvtColor(image, out, cv::COLOR_GRAY2BGR);
+	std::vector<cv::Vec2f> lines;
+	cv::HoughLines(image, lines, 1, CV_PI / 180, 2200, 0, 0);
+	for (size_t i = 0; i < lines.size(); i++)
+	{
+		float rho = lines[i][0], theta = lines[i][1];
+		cv::Point pt1, pt2;
+		double a = cos(theta), b = sin(theta);
+		double x0 = a * rho, y0 = b * rho;
+		pt1.x = cvRound(x0 + 1000 * (-b));
+		pt1.y = cvRound(y0 + 1000 * (a));
+		pt2.x = cvRound(x0 - 1000 * (-b));
+		pt2.y = cvRound(y0 - 1000 * (a));
+		cv::line(out, pt1, pt2, cv::Scalar(0, 0, 255), 2, 16);
+	}
+
+	std::cout << "Saving final image at: " << (folder + fileName) << std::endl;
+	cv::imwrite((folder + fileName), out);
+
+	return true;
 }
