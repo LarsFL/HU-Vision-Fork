@@ -10,6 +10,9 @@
 #include "HereBeDragons.h"
 #include "ImageFactory.h"
 
+#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/highgui/highgui.hpp>
+
 DLLExecution::DLLExecution(RGBImage * inputImage):
 	inputImage(inputImage),
 	resultPreProcessingStep1(0),
@@ -44,22 +47,31 @@ DLLExecution::~DLLExecution() {
 
 
 bool DLLExecution::executePostProcessing() {
-	if (!hasPreparedExtraction || !resultPreProcessingStep4) {
-		return false;
-	}
 
-	double scaleFactorReverse = (1.0 / downScaleFactor);
+	cv::Mat dst;
+	ImageIO::intensityToRGB(*this->resultPreProcessingStep4, dst);
+	cv::Mat test(this->resultPreProcessingStep4);
+	cv::cvtColor(this->resultPreProcessingStep4, );
 
-	featuresScaled = features;
-	featuresScaled.applyScale(scaleFactorReverse);
+	cv::HoughLines()
 
 
-	if (!postProcessing.stepLocalizeAdditionalFeatures(*resultPreProcessingStep4, featuresScaled)) {
-		return false;
-	}
-	if (!postProcessing.stepPostProcessAdjustFeatures(featuresScaled)) {
-		return false;
-	}
+	//if (!hasPreparedExtraction || !resultPreProcessingStep4) {
+	//	return false;
+	//}
+
+	//double scaleFactorReverse = (1.0 / downScaleFactor);
+
+	//featuresScaled = features;
+	//featuresScaled.applyScale(scaleFactorReverse);
+
+
+	//if (!postProcessing.stepLocalizeAdditionalFeatures(*resultPreProcessingStep4, featuresScaled)) {
+	//	return false;
+	//}
+	//if (!postProcessing.stepPostProcessAdjustFeatures(featuresScaled)) {
+	//	return false;
+	//}
 
 	return true;
 }
