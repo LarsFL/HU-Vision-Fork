@@ -23,10 +23,10 @@ int main(int argc, char * argv[]) {
 	ImageFactory::setImplementation(ImageFactory::DEFAULT);
 	//ImageFactory::setImplementation(ImageFactory::STUDENT);
 
-
-	ImageIO::debugFolder = "C:\\Users\\larsl\\Downloads\\FaceMinMin\\Pasadena-Houses-Debug";
-	std::string finalFolder = "C:\\Users\\larsl\\Downloads\\FaceMinMin\\Pasadena-Houses-Hough\\";
-	std::string imageFolder = "C:\\Users\\larsl\\Documents\\Pasadena-Houses-2000\\Pasadena-Houses\\*.jpg";
+	
+	ImageIO::debugFolder = "C:\\Users\\Daan\\Downloads\\Pasadena-Houses-2000\\debug";
+	std::string finalFolder = "C:\\Users\\Daan\\Downloads\\Pasadena-Houses-2000\\final";
+	std::string imageFolder = "C:\\Users\\Daan\\Downloads\\Pasadena-Houses-2000\\Pasadena-Houses\\*.jpg";
 	ImageIO::isInDebugMode = true; //If set to false the ImageIO class will skip any image save function calls
 
 	std::vector<std::string> fn;
@@ -116,7 +116,7 @@ bool executeSteps(DLLExecution * executor, std::string folder, std::string fileN
 	}
 	ImageIO::saveIntensityImage(*executor->resultPreProcessingStep4, ImageIO::getDebugFileName(fileName));
 
-	if (!executor->executePreProcessingStep5(false, "C:\\Users\\larsl\\Downloads\\FaceMinMin\\Pasadena-Houses-Debug", folder, fileName)) {
+	if (!executor->executePreProcessingStep5(false, "C:\\Users\\Daan\\Downloads\\Pasadena-Houses-2000\\debug", folder, fileName)) {
 		std::cout << "Pre-processing step 4 failed!" << std::endl;
 		return false;
 	}

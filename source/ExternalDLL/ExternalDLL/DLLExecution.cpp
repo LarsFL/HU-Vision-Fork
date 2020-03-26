@@ -423,11 +423,12 @@ bool DLLExecution::executePreProcessingStep4(bool student) {
 
 bool DLLExecution::executePreProcessingStep5(bool student, std::string debugFolder, std::string folder, std::string fileName) {
 	std::cout << "Getting image from: " << (debugFolder + "\\" + fileName) << std::endl;
-	cv::Mat image = cv::imread((debugFolder+"\\"+fileName), CV_LOAD_IMAGE_UNCHANGED);
+	cv::Mat image_not_inverted = cv::imread((debugFolder+"\\"+fileName), CV_LOAD_IMAGE_UNCHANGED);
+	cv::Mat image = cv::Scalar::all(255) - image_not_inverted;
 	cv::Mat out;
 	cv::cvtColor(image, out, cv::COLOR_GRAY2BGR);
 	std::vector<cv::Vec2f> lines;
-	cv::HoughLines(image, lines, 1, CV_PI / 180, 2200, 0, 0);
+	cv::HoughLines(image, lines, 1, CV_PI / 180, 1000, 0, 0);
 	for (size_t i = 0; i < lines.size(); i++)
 	{
 		float rho = lines[i][0], theta = lines[i][1];
