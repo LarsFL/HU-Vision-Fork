@@ -428,7 +428,7 @@ bool DLLExecution::executePreProcessingStep5(bool student, std::string debugFold
 	cv::Mat out;
 	cv::cvtColor(image, out, cv::COLOR_GRAY2BGR);
 	std::vector<cv::Vec2f> lines;
-	cv::HoughLines(image, lines, 1, CV_PI / 180, 1000, 0, 0);
+	cv::HoughLines(image, lines, 1, (CV_PI / 180) / 2, 670, 0, 0);
 	for (size_t i = 0; i < lines.size(); i++)
 	{
 		float rho = lines[i][0], theta = lines[i][1];

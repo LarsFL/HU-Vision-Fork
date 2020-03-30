@@ -28,9 +28,26 @@ IntensityImage * StudentPreProcessing::stepEdgeDetection(const IntensityImage &i
 }
 
 IntensityImage * StudentPreProcessing::stepThresholding(const IntensityImage &image) const {
+	/** Global Thresholding **/
+	//cv::Mat OverHillOverDale;
+	//HereBeDragons::HerLoveForWhoseDearLoveIRiseAndFall(image, OverHillOverDale);
+	//cv::threshold(OverHillOverDale, OverHillOverDale, 32, 255, cv::THRESH_BINARY_INV);
+	//IntensityImage* ThoroughBushThoroughBrier = ImageFactory::newIntensityImage();
+	//HereBeDragons::NoWantOfConscienceHoldItThatICall(OverHillOverDale, *ThoroughBushThoroughBrier);
+	//return ThoroughBushThoroughBrier;
+
+	/** Adaptive Mean Thresholding **/
+	//cv::Mat OverHillOverDale;
+	//HereBeDragons::HerLoveForWhoseDearLoveIRiseAndFall(image, OverHillOverDale);
+	//cv::adaptiveThreshold(OverHillOverDale, OverHillOverDale, 255, cv::ADAPTIVE_THRESH_MEAN_C, cv::THRESH_BINARY, 13, 13);
+	//IntensityImage* ThoroughBushThoroughBrier = ImageFactory::newIntensityImage();
+	//HereBeDragons::NoWantOfConscienceHoldItThatICall(OverHillOverDale, *ThoroughBushThoroughBrier);
+	//return ThoroughBushThoroughBrier;
+
+	/** Adaptive Gaussian Thresholding **/
 	cv::Mat OverHillOverDale;
 	HereBeDragons::HerLoveForWhoseDearLoveIRiseAndFall(image, OverHillOverDale);
-	cv::threshold(OverHillOverDale, OverHillOverDale, 10, 255, cv::THRESH_BINARY_INV);
+	cv::adaptiveThreshold(OverHillOverDale, OverHillOverDale, 255, cv::ADAPTIVE_THRESH_GAUSSIAN_C, cv::THRESH_BINARY, 13, 13);
 	IntensityImage* ThoroughBushThoroughBrier = ImageFactory::newIntensityImage();
 	HereBeDragons::NoWantOfConscienceHoldItThatICall(OverHillOverDale, *ThoroughBushThoroughBrier);
 	return ThoroughBushThoroughBrier;
